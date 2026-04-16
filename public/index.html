@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HR Platform | Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .glass-card { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(10px); }
+  </style>
+</head>
+<body class="bg-gray-50 min-h-screen pb-12">
+
+  <nav class="bg-indigo-600 p-4 mb-8 shadow-lg">
+    <div class="container mx-auto flex justify-between items-center">
+      <h1 class="text-white text-2xl font-bold tracking-tight">HR Platform</h1>
+      <span class="text-indigo-100 text-sm italic">Talent Management System v1.0</span>
+    </div>
+  </nav>
+
+  <div class="container mx-auto px-4 grid grid-cols-1 lg:grid-cols-2 gap-8">
+    
+    <section class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+      <div class="flex items-center mb-6">
+        <div class="bg-indigo-100 p-2 rounded-lg mr-4">
+          <svg class="w-6 h-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path></svg>
+        </div>
+        <h2 class="text-xl font-semibold text-gray-800">Register Candidate</h2>
+      </div>
+
+      <div class="space-y-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+          <input type="text" id="fullName" placeholder="John Doe" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all">
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
+          <input type="email" id="email" placeholder="john@example.com" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all">
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Skill</label>
+            <select id="skillSelect" class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-white">
+              <option value="">-- Select --</option>
+              <option value="SQL">SQL</option>
+              <option value="Node.js">Node.js</option>
+              <option value="HTML">HTML</option>
+              <option value="JavaScript">JavaScript</option>
+              <option value="Python">Python</option>
+              <option value="Docker">Docker</option>
+              <option value="Linux">Linux</option>
+              <option value="Java">Java</option>
+              <option value="CSS">CSS</option>
+              <option value="React">React</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Level</label>
+            <select id="skillLevel" class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-white">
+              <option value="">-- Select --</option>
+              <option value="1">1 - Basic</option>
+              <option value="2">2 - Intermediate</option>
+              <option value="3">3 - Advanced</option>
+            </select>
+          </div>
+        </div>
+
+        <button id="addSkillBtn" class="w-full py-2 px-4 border-2 border-dashed border-indigo-300 text-indigo-600 rounded-lg hover:bg-indigo-50 transition-colors font-medium">
+          + Add Skill to List
+        </button>
+        
+        <ul id="skillList" class="flex flex-wrap gap-2 py-2"></ul>
+
+        <button id="registerCandidateBtn" class="w-full bg-indigo-600 text-white py-3 rounded-lg font-semibold hover:bg-indigo-700 shadow-md transform hover:-translate-y-0.5 transition-all">
+          Register Candidate
+        </button>
+        <p id="registerResult" class="text-sm mt-2 text-center"></p>
+      </div>
+    </section>
+
+    <section class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col">
+      <div class="flex justify-between items-center mb-6">
+        <h2 class="text-xl font-semibold text-gray-800">Available Offers</h2>
+        <button id="getOffersBtn" class="bg-gray-100 text-gray-700 px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-200 transition-all">
+          🔄 Refresh List
+        </button>
+      </div>
+
+      <div class="overflow-x-auto rounded-lg border border-gray-200">
+        <table id="offersTable" class="min-w-full divide-y divide-gray-200" style="display:none;">
+          <thead class="bg-gray-50">
+            <tr>
+              <th class="px-4 py-3 text-left text-xs font-bold text-gray-500 uppercase">ID</th>
+              <th class="px-4 py-3 text-left text-xs font-bold text-gray-500 uppercase">Position</th>
+              <th class="px-4 py-3 text-left text-xs font-bold text-gray-500 uppercase">Company</th>
+              <th class="px-4 py-3 text-left text-xs font-bold text-gray-500 uppercase">Skills</th>
+            </tr>
+          </thead>
+          <tbody id="offersBody" class="bg-white divide-y divide-gray-200 text-sm"></tbody>
+        </table>
+      </div>
+      <p id="offersError" class="text-red-500 text-sm mt-4"></p>
+    </section>
+
+    <section class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+      <h2 class="text-xl font-semibold text-gray-800 mb-6">Quick Application</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Offer ID</label>
+          <input type="number" id="applyOfferId" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Candidate ID</label>
+          <input type="number" id="applyCandidateId" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
+        </div>
+      </div>
+      <button id="applyBtn" class="w-full bg-emerald-500 text-white py-3 rounded-lg font-semibold hover:bg-emerald-600 shadow-md transition-all">
+        Submit Application
+      </button>
+      <p id="applyResult" class="text-sm mt-2 text-center"></p>
+    </section>
+
+    <section class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+      <h2 class="text-xl font-semibold text-gray-800 mb-6">Application Tracker</h2>
+      <div class="flex gap-2 mb-4">
+        <input type="number" id="applicationId" placeholder="Enter Application ID" class="flex-1 px-4 py-2 border border-gray-300 rounded-lg">
+        <button id="checkStatusBtn" class="bg-gray-800 text-white px-6 py-2 rounded-lg font-medium hover:bg-gray-900 transition-all">
+          Check
+        </button>
+      </div>
+      <ul id="statusResult" class="space-y-2"></ul>
+    </section>
+
+  </div>
+
+  <script src="./js/app.js"></script>
+</body>
+</html>
